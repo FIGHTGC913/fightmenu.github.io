@@ -279,7 +279,6 @@
             <a href="#" onclick="showSection('consultant')" data-section="consultant">ที่ปรึกษา</a>
             <a href="#" onclick="showSection('ethics')" data-section="ethics">คณะกรรมการจริยธรรม</a>
             <a href="#" onclick="showSection('certifier')" data-section="certifier">ผู้ตรวจรับรองคุณภาพ</a>
-            <a href="#" onclick="showSection('trainee')" data-section="trainee">ผู้ตรวจรับรองคุณภาพฝึกหัด</a>
             <a href="#" onclick="showSection('public')" data-section="public">บุคคลทั่วไป</a>
         </div>
 
@@ -516,42 +515,7 @@
             </div>
         </div>
 
-        <div id="trainee" class="section">
-            <h2>👥 ผู้ตรวจรับรองคุณภาพฝึกหัด</h2>
-            <div class="card mt-4">
-                <div class="card-header">
-                    <span>รายการฝึกหัด</span>
-                    <button class="btn btn-add text-white" onclick="alert('เพิ่มฝึกหัดใหม่')">+ เพิ่ม</button>
-                </div>
-                <div class="card-body p-0">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">ชื่อผู้ใช้</th>
-                                <th scope="col">อีเมล</th>
-                                <th scope="col">สถานะ</th>
-                                <th scope="col">จัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>trainee01</td>
-                                <td>trainee01@example.com</td>
-                                <td>ใช้งาน</td>
-                                <td>
-                                    <button class="btn btn-edit text-white"
-                                        onclick="alert('แก้ไขผู้ใช้: trainee01')">แก้ไข</button>
-                                    <button class="btn btn-delete text-white"
-                                        onclick="alert('ลบผู้ใช้: trainee01')">ลบ</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+      
 
         <div id="public" class="section">
             <h2>👥 บุคคลทั่วไป</h2>
@@ -1256,10 +1220,10 @@
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['ผู้ดูแลระบบ', 'ที่ปรึกษา', 'คณะกรรมการ', 'ผู้ตรวจรับรอง', 'ผู้ตรวจรับรองคุณภาพฝึกหัด', 'บุคคลทั่วไป'],
+                    labels: ['ผู้ดูแลระบบ', 'ที่ปรึกษา', 'คณะกรรมการ', 'ผู้ตรวจรับรอง', 'บุคคลทั่วไป'],
                     datasets: [{
                         label: 'จำนวนผู้ใช้',
-                        data: [3, 2, 1, 1, 1, 2],
+                        data: [3, 2, 1, 1, 2],
                         backgroundColor: '#16a085',
                         borderWidth: 1
                     }]
