@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Panel - 10-4-68</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://assets.grok.com/users/c75ca263-a730-41be-90fe-f3938b34a596/generated/eYztMyRev3wINkOo/image.jpg">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <style>
+        .fight {
+            width: 250px;
+            background: linear-gradient(180deg, #2C3E50 0%, #1A2634 100%);
+            color: white;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .menu-container {
+            text-align: center;
+        }
+
+        .menu-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f6f9;
+        }
+
+        .sidebar {
+            height: 100vh;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: linear-gradient(180deg, #2C3E50 0%, #1A2634 100%);
+            color: white;
+            padding-top: 40px;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar h4 {
+            text-align: center;
+            color: #ecf0f1;
+            font-size: 1.6rem;
+            margin-bottom: 35px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .sidebar a {
+            color: #ecf0f1;
+            text-decoration: none;
+            display: block;
+            padding: 14px 20px;
+            font-size: 1rem;
+            border-bottom: 1px solid rgba(127, 140, 141, 0.2);
+            transition: background-color 0.3s ease, padding-left 0.3s ease;
+            border-radius: 8px;
+            margin: 2px 10px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a:focus {
+            background-color: #16a085;
+            color: white;
+            padding-left: 25px;
+        }
+
+        .sidebar a.active {
+            background-color: #16a085;
+            font-weight: 600;
+        }
+
+        .submenu {
+            padding-left: 20px;
+            background: #34495e;
+            display: none;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .submenu a {
+            font-size: 0.95rem;
+            padding: 12px 20px 12px 40px;
+            background: #34495e;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            margin: 2px 5px;
+        }
+
+        .submenu a:hover {
+            background: #1abc9c;
+            border-left: 4px solid #16a085;
+            color: white;
+        }
+
+        .submenu-item-toggle {
+            position: relative;
+        }
+
+        .submenu-item-toggle::after {
+            content: "▼";
+            position: absolute;
+            right: 20px;
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+
+        .submenu.show {
+            display: block;
+        }
+
+        .submenu-item-toggle.active::after {
+            transform: rotate(180deg);
+        }
+
+        .submenu .submenu {
+            padding-left: 40px;
+            background: #3d566e;
+        }
+
+        .content {
+            margin-left: 270px;
+            padding: 40px;
+        }
+
+        .content h2 {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: #2c3e50;
+            color: white;
+            font-weight: 600;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-add {
+            background: #16a085;
+            border: none;
+            padding: 8px 20px;
+            font-size: 0.95rem;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-add:hover {
+            background: #1abc9c;
+        }
+
+        .btn-approve {
+            background: #27ae60;
+            border: none;
+            padding: 6px 15px;
+            font-size: 0.9rem;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-approve:hover {
+            background: #219653;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background: #34495e;
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+
+        .table tbody tr {
+            transition: background 0.3s ease;
+        }
+
+        .table tbody tr:hover {
+            background: #ecf0f1;
+        }
+
+        .btn-edit {
+            background: #f39c12;
+            border: none;
+            padding: 6px 15px;
+            font-size: 0.9rem;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-edit:hover {
+            background: #e67e22;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            border: none;
+            padding: 6px 15px;
+            font-size: 0.9rem;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        #calendar {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .chart-container {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="fight">
+            <div class="logo-container">
+                <img src="https://necast.nrct.go.th/ncadmin/images/logo-web.png" alt="Logo" class="logo">
+            </div>
+            <div class="menu-container">
+                <h4 class="menu-title">Admin Panel</h4>
+            </div>
+        </div>
+
+
+        <a href="#" onclick="toggleMainMenu('userMenu')">👥 ผู้ใช้งานในระบบ</a>
+        <div class="submenu" id="userMenu">
+            <a href="#" onclick="showSection('admin')" data-section="admin">ผู้ดูแลระบบ</a>
+            <a href="#" onclick="showSection('consultant')" data-section="consultant">ที่ปรึกษา</a>
+            <a href="#" onclick="showSection('ethics')" data-section="ethics">คณะกรรมการจริยธรรม</a>
+            <a href="#" onclick="showSection('certifier')" data-section="certifier">ผู้ตรวจรับรองคุณภาพ</a>
+            <a href="#" onclick="showSection('trainee')" data-section="trainee">ผู้ตรวจรับรองคุณภาพฝึกหัด</a>
+            <a href="#" onclick="showSection('public')" data-section="public">บุคคลทั่วไป</a>
+        </div>
+
+        <a href="#" onclick="toggleMainMenu('dataMenu')">📊 ข้อมูลเฉพาะ</a>
+        <div class="submenu" id="dataMenu">
+            <a href="#" class="submenu-item-toggle" onclick="toggleMenu(this, 'collapseProject')">โครงการอบรม</a>
+            <div class="submenu" id="collapseProject">
+                <a href="#" onclick="showSection('projectManage')" data-section="projectManage">จัดการ</a>
+                <a href="#" onclick="showSection('projectPending')" data-section="projectPending">รออนุมัติ</a>
+            </div>
+            <a href="#" class="submenu-item-toggle" onclick="toggleMenu(this, 'collapseInstitute')">สถาบัน</a>
+            <div class="submenu" id="collapseInstitute">
+                <a href="#" onclick="showSection('instituteManage')" data-section="instituteManage">จัดการ</a>
+                <a href="#" onclick="showSection('institutePending')" data-section="institutePending">รออนุมัติ</a>
+            </div>
+            <a href="#" class="submenu-item-toggle" onclick="toggleMenu(this, 'collapseArea')">พื้นที่</a>
+            <div class="submenu" id="collapseArea">
+                <a href="#" onclick="showSection('areaManage')" data-section="areaManage">จัดการ</a>
+                <a href="#" onclick="showSection('areaPending')" data-section="areaPending">รออนุมัติ</a>
+            </div>
+        </div>
+
+        <a href="#" onclick="toggleMainMenu('requestMenu')">📥 คำร้องขอ</a>
+        <div class="submenu" id="requestMenu">
+            <a href="#" class="submenu-item-toggle"
+                onclick="toggleMenu(this, 'collapseTrainingRequest')">คำขอรับการอบรม</a>
+            <div class="submenu" id="collapseTrainingRequest">
+                <a href="#" onclick="showSection('trainingManage')" data-section="trainingManage">จัดการ</a>
+                <a href="#" onclick="showSection('trainingPending')" data-section="trainingPending">รออนุมัติ</a>
+            </div>
+            <a href="#" class="submenu-item-toggle"
+                onclick="toggleMenu(this, 'collapseConsultationRequest')">คำขอรับคำปรึกษา</a>
+            <div class="submenu" id="collapseConsultationRequest">
+                <a href="#" onclick="showSection('consultationManage')" data-section="consultationManage">จัดการ</a>
+                <a href="#" onclick="showSection('consultationPending')"
+                    data-section="consultationPending">รออนุมัติ</a>
+            </div>
+            <a href="#" class="submenu-item-toggle"
+                onclick="toggleMenu(this, 'collapseCertificationRequest')">คำขอรับใบรับรองมาตรฐาน</a>
+            <div class="submenu" id="collapseCertificationRequest">
+                <a href="#" onclick="showSection('certificationManage')" data-section="certificationManage">จัดการ</a>
+                <a href="#" onclick="showSection('certificationPending')"
+                    data-section="certificationPending">รออนุมัติ</a>
+            </div>
+        </div>
+
+        <a href="#" onclick="toggleMainMenu('dashboardMenu')">📊 แดชบอร์ด</a>
+        <div class="submenu" id="dashboardMenu">
+            <a href="#" onclick="showSection('summary')" data-section="summary">สรุป</a>
+            <a href="#" onclick="showSection('calendar')" data-section="calendar">ตารางงาน</a>
+            <a href="#" onclick="showSection('userStats')" data-section="userStats">จำนวนผู้ใช้</a>
+        </div>
+
+        <a href="#" onclick="toggleMainMenu('logMenu')">📜 Log</a>
+        <div class="submenu" id="logMenu">
+            <a href="#" onclick="showSection('emailLog')" data-section="emailLog">Email Log</a>
+            <a href="#" onclick="showSection('taskLog')" data-section="taskLog">Task Log</a>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <div id="admin" class="section">
+            <h2>👥 ผู้ดูแลระบบ</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการผู้ดูแลระบบ</span>
+                    <button class="btn btn-add text-white" onclick="alert('เพิ่มผู้ดูแลระบบใหม่')">+ เพิ่ม</button>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ชื่อผู้ใช้</th>
+                                <th scope="col">อีเมล</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>admin01</td>
+                                <td>admin01@example.com</td>
+                                <td>ใช้งาน</td>
+                                <td>
+                                    <button class="btn btn-edit text-white"
+                                        onclick="alert('แก้ไขผู้ใช้: admin01')">แก้ไข</button>
+                                    <button class="btn btn-delete text-white"
+                                        onclick="alert('ลบผู้ใช้: admin01')">ลบ</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>admin02</td>
+                                <td>admin02@example.com</td>
+                                <td>ใช้งาน</td>
+                                <td>
+                                    <button class="btn btn-edit text-white"
+                                        onclick="alert('แก้ไขผู้ใช้: admin02')">แก้ไข</button>
+                                    <button class="btn btn-delete text-white"
+                                        onclick="alert('ลบผู้ใช้: admin02')">ลบ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="consultant" class="section">
+            <h2>👥 ที่ปรึกษา</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการที่ปรึกษา</span>
+                    <button class="btn btn-add text-white" onclick="alert('เพิ่มที่ปรึกษาใหม่')">+ เพิ่ม</button>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ชื่อผู้ใช้</th>
+                                <th scope="col">อีเมล</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>consult01</td>
+                                <td>consult01@example.com</td>
+                                <td>ใช้งาน</td>
+                                <td>
+                                    <button class="btn btn-edit text-white"
+                                        onclick="alert('แก้ไขผู้ใช้: consult01')">แก้ไข</button>
+                                    <button class="btn btn-delete text-white"
+                                        onclick="alert('ลบผู้ใช้: consult01')">ลบ</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>consult02</td>
+                                <td>consult02@example.com</td>
+                                <td>ระงับ</td>
+                                <td>
+                                    <button class="btn btn-edit text-white"
+                                        onclick="alert('แก้ไขผู้ใช้: consult02')">แก้ไข</button>
+                                    <button class="btn btn-delete text-white"
+                                        onclick="alert('ลบผู้ใช้: consult02')">ลบ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="ethics" class="section">
+            <h2>👥 คณะกรรมการจริยธรรม</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการคณะกรรมการจริยธรรม</span>
+                    <button class="btn btn-add text-white" onclick="alert('เพิ่มคณะกรรมการจริยธรรมใหม่')">+
+                        เพิ่ม</button>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ชื่อผู้ใช้</th>
+                                <th scope="col">อีเมล</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>ethics01</td>
+                                <td>ethics01@example.com</td>
+                                <td>ใช้งาน</td>
+                                <td>
+                                    <button class="btn btn-edit text-white"
+                                        onclick="alert('แก้ไขผู้ใช้: ethics01')">แก้ไข</button>
+                                    <button class="btn btn-delete text-white"
+                                        onclick="alert('ลบผู้ใช้: ethics01')">ลบ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="certifier" class="section">
+            <h2>👥 ผู้ตรวจรับรองคุณภาพ</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการผู้ตรวจรับรองคุณภาพ</span>
+                    <button class="btn btn-add text-white" onclick="alert('เพิ่มผู้ตรวจรับรองคุณภาพใหม่')">+
+                        เพิ่ม</button>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ชื่อผู้ใช้</th>
+                                <th scope="col">อีเมล</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>cert01</td>
+                                <td>cert01@example.com</td>
+                                <td>ใช้งาน</td>
+                                <td>
+                                    <button class="btn btn-edit text-white"
+                                        onclick="alert('แก้ไขผู้ใช้: cert01')">แก้ไข</button>
+                                    <button class="btn btn-delete text-white"
+                                        onclick="alert('ลบผู้ใช้: cert01')">ลบ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="trainee" class="section">
+            <h2>👥 ผู้ตรวจรับรองคุณภาพฝึกหัด</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการฝึกหัด</span>
+                    <button class="btn btn-add text-white" onclick="alert('เพิ่มฝึกหัดใหม่')">+ เพิ่ม</button>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ชื่อผู้ใช้</th>
+                                <th scope="col">อีเมล</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>trainee01</td>
+                                <td>trainee01@example.com</td>
+                                <td>ใช้งาน</td>
+                                <td>
+                                    <button class="btn btn-edit text-white"
+                                        onclick="alert('แก้ไขผู้ใช้: trainee01')">แก้ไข</button>
+                                    <button class="btn btn-delete text-white"
+                                        onclick="alert('ลบผู้ใช้: trainee01')">ลบ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="public" class="section">
+            <h2>👥 บุคคลทั่วไป</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการบุคคลทั่วไป</span>
+                    <button class="btn btn-add text-white" onclick="alert('เพิ่มบุคคลทั่วไปใหม่')">+ เพิ่ม</button>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ชื่อผู้ใช้</th>
+                                <th scope="col">อีเมล</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>user01</td>
+                                <td>user01@example.com</td>
+                                <td>ใช้งาน</td>
+                                <td>
+                                    <button class="btn btn-edit text-white"
+                                        onclick="alert('แก้ไขผู้ใช้: user01')">แก้ไข</button>
+                                    <button class="btn btn-delete text-white"
+                                        onclick="alert('ลบผู้ใช้: user01')">ลบ</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>user02</td>
+                                <td>user02@example.com</td>
+                                <td>ใช้งาน</td>
+                                <td>
+                                    <button class="btn btn-edit text-white"
+                                        onclick="alert('แก้ไขผู้ใช้: user02')">แก้ไข</button>
+                                    <button class="btn btn-delete text-white"
+                                        onclick="alert('ลบผู้ใช้: user02')">ลบ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="projectManage" class="section">
+            <h2>📊 โครงการอบรม - จัดการ</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการโครงการอบรม</span>
+                    <button class="btn btn-add text-white" onclick="alert('เพิ่มโครงการอบรมใหม่')">+ เพิ่ม</button>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ชื่อโครงการ</th>
+                                <th scope="col">วันที่เริ่ม</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>อบรมทักษะพื้นฐาน</td>
+                                <td>2025-05-01</td>
+                                <td>ดำเนินการ</td>
+                                <td>
+                                    <button class="btn btn-edit text-white"
+                                        onclick="alert('แก้ไขโครงการ: อบรมทักษะพื้นฐาน')">แก้ไข</button>
+                                    <button class="btn btn-delete text-white"
+                                        onclick="alert('ลบโครงการ: อบรมทักษะพื้นฐาน')">ลบ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="projectPending" class="section">
+            <h2>📊 โครงการอบรม - รออนุมัติ</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการโครงการอบรมรออนุมัติ</span>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ชื่อโครงการ</th>
+                                <th scope="col">วันที่ขอ</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>อบรมขั้นสูง</td>
+                                <td>2025-04-10</td>
+                                <td>รออนุมัติ</td>
+                                <td>
+                                    <button class="btn btn-approve text-white"
+                                        onclick="alert('อนุมัติโครงการ: อบรมขั้นสูง')">อนุมัติ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="instituteManage" class="section">
+            <h2>📊 สถาบัน - จัดการ</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการสถาบัน</span>
+                    <button class="btn btn-add text-white" onclick="alert('เพิ่มสถาบันใหม่')">+ เพิ่ม</button>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ชื่อสถาบัน</th>
+                                <th scope="col">ที่อยู่</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>สถาบัน A</td>
+                                <td>กรุงเทพฯ</td>
+                                <td>ใช้งาน</td>
+                                <td>
+                                    <button class="btn btn-edit text-white"
+                                        onclick="alert('แก้ไขสถาบัน: สถาบัน A')">แก้ไข</button>
+                                    <button class="btn btn-delete text-white"
+                                        onclick="alert('ลบสถาบัน: สถาบัน A')">ลบ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="institutePending" class="section">
+            <h2>📊 สถาบัน - รออนุมัติ</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการสถาบันรออนุมัติ</span>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ชื่อสถาบัน</th>
+                                <th scope="col">วันที่ขอ</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>สถาบัน B</td>
+                                <td>2025-04-10</td>
+                                <td>รออนุมัติ</td>
+                                <td>
+                                    <button class="btn btn-approve text-white"
+                                        onclick="alert('อนุมัติสถาบัน: สถาบัน B')">อนุมัติ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="areaManage" class="section">
+            <h2>📊 พื้นที่ - จัดการ</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการพื้นที่</span>
+                    <button class="btn btn-add text-white" onclick="alert('เพิ่มพื้นที่ใหม่')">+ เพิ่ม</button>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ชื่อพื้นที่</th>
+                                <th scope="col">จังหวัด</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>พื้นที่ 1</td>
+                                <td>เชียงใหม่</td>
+                                <td>ใช้งาน</td>
+                                <td>
+                                    <button class="btn btn-edit text-white"
+                                        onclick="alert('แก้ไขพื้นที่: พื้นที่ 1')">แก้ไข</button>
+                                    <button class="btn btn-delete text-white"
+                                        onclick="alert('ลบพื้นที่: พื้นที่ 1')">ลบ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="areaPending" class="section">
+            <h2>📊 พื้นที่ - รออนุมัติ</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการพื้นที่รออนุมัติ</span>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ชื่อพื้นที่</th>
+                                <th scope="col">วันที่ขอ</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>พื้นที่ 2</td>
+                                <td>2025-04-10</td>
+                                <td>รออนุมัติ</td>
+                                <td>
+                                    <button class="btn btn-approve text-white"
+                                        onclick="alert('อนุมัติพื้นที่: พื้นที่ 2')">อนุมัติ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="trainingManage" class="section">
+            <h2>📥 คำขอรับการอบรม - จัดการ</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการคำขอรับการอบรม</span>
+                    <button class="btn btn-add text-white" onclick="alert('เพิ่มคำขอรับการอบรมใหม่')">+ เพิ่ม</button>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ผู้ขอ</th>
+                                <th scope="col">โครงการ</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>user01</td>
+                                <td>อบรมทักษะพื้นฐาน</td>
+                                <td>อนุมัติแล้ว</td>
+                                <td>
+                                    <button class="btn btn-edit text-white"
+                                        onclick="alert('แก้ไขคำขอ: user01')">แก้ไข</button>
+                                    <button class="btn btn-delete text-white"
+                                        onclick="alert('ลบคำขอ: user01')">ลบ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="trainingPending" class="section">
+            <h2>📥 คำขอรับการอบรม - รออนุมัติ</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการคำขอรับการอบรมรออนุมัติ</span>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ผู้ขอ</th>
+                                <th scope="col">โครงการ</th>
+                                <th scope="col">วันที่ขอ</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>user02</td>
+                                <td>อบรมขั้นสูง</td>
+                                <td>2025-04-10</td>
+                                <td>รออนุมัติ</td>
+                                <td>
+                                    <button class="btn btn-approve text-white"
+                                        onclick="alert('อนุมัติคำขอ: user02')">อนุมัติ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="consultationManage" class="section">
+            <h2>📥 คำขอรับคำปรึกษา - จัดการ</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการคำขอรับคำปรึกษา</span>
+                    <button class="btn btn-add text-white" onclick="alert('เพิ่มคำขอรับคำปรึกษาใหม่')">+ เพิ่ม</button>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ผู้ขอ</th>
+                                <th scope="col">หัวข้อ</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>user03</td>
+                                <td>ปรึกษาการพัฒนา</td>
+                                <td>อนุมัติแล้ว</td>
+                                <td>
+                                    <button class="btn btn-edit text-white"
+                                        onclick="alert('แก้ไขคำขอ: user03')">แก้ไข</button>
+                                    <button class="btn btn-delete text-white"
+                                        onclick="alert('ลบคำขอ: user03')">ลบ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="consultationPending" class="section">
+            <h2>📥 คำขอรับคำปรึกษา - รออนุมัติ</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการคำขอรับคำปรึกษารออนุมัติ</span>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ผู้ขอ</th>
+                                <th scope="col">หัวข้อ</th>
+                                <th scope="col">วันที่ขอ</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>user04</td>
+                                <td>ปรึกษาการจัดการ</td>
+                                <td>2025-04-10</td>
+                                <td>รออนุมัติ</td>
+                                <td>
+                                    <button class="btn btn-approve text-white"
+                                        onclick="alert('อนุมัติคำขอ: user04')">อนุมัติ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="certificationManage" class="section">
+            <h2>📥 คำขอรับใบรับรองมาตรฐาน - จัดการ</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการคำขอรับใบรับรองมาตรฐาน</span>
+                    <button class="btn btn-add text-white" onclick="alert('เพิ่มคำขอรับใบรับรองใหม่')">+ เพิ่ม</button>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ผู้ขอ</th>
+                                <th scope="col">ประเภทใบรับรอง</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>user05</td>
+                                <td>มาตรฐาน ISO</td>
+                                <td>อนุมัติแล้ว</td>
+                                <td>
+                                    <button class="btn btn-edit text-white"
+                                        onclick="alert('แก้ไขคำขอ: user05')">แก้ไข</button>
+                                    <button class="btn btn-delete text-white"
+                                        onclick="alert('ลบคำขอ: user05')">ลบ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="certificationPending" class="section">
+            <h2>📥 คำขอรับใบรับรองมาตรฐาน - รออนุมัติ</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>รายการคำขอรับใบรับรองมาตรฐานรออนุมัติ</span>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">ผู้ขอ</th>
+                                <th scope="col">ประเภทใบรับรอง</th>
+                                <th scope="col">วันที่ขอ</th>
+                                <th scope="col">สถานะ</th>
+                                <th scope="col">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>user06</td>
+                                <td>มาตรฐาน GMP</td>
+                                <td>2025-04-10</td>
+                                <td>รออนุมัติ</td>
+                                <td>
+                                    <button class="btn btn-approve text-white"
+                                        onclick="alert('อนุมัติคำขอ: user06')">อนุมัติ</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="summary" class="section">
+            <h2>📊 สรุปภาพรวมคำร้องขอ</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>สรุปสถานะคำร้องขอทั้งหมด</span>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="requestChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="calendar" class="section">
+            <h2>📊 ตารางงาน (ปฏิทิน)</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>ปฏิทินงาน</span>
+                </div>
+                <div class="card-body">
+                    <div id="calendarContainer"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="userStats" class="section">
+            <h2>📊 จำนวนผู้ใช้ในระบบ</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>สถิติผู้ใช้งาน</span>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="userChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="emailLog" class="section">
+            <h2>📜 Email Log</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>บันทึกการส่งอีเมล</span>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">วันที่/เวลา</th>
+                                <th scope="col">ผู้รับ</th>
+                                <th scope="col">หัวข้อ</th>
+                                <th scope="col">สถานะ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>2025-04-10 09:00</td>
+                                <td>user01@example.com</td>
+                                <td>แจ้งผลอนุมัติ</td>
+                                <td>ส่งสำเร็จ</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>2025-04-10 10:15</td>
+                                <td>admin01@example.com</td>
+                                <td>แจ้งเตือนงาน</td>
+                                <td>ส่งสำเร็จ</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="taskLog" class="section">
+            <h2>📜 Task Log</h2>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <span>บันทึกงานอัตโนมัติ</span>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">วันที่/เวลา</th>
+                                <th scope="col">งาน</th>
+                                <th scope="col">สถานะ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>2025-04-10 08:00</td>
+                                <td>สำรองข้อมูล</td>
+                                <td>สำเร็จ</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>2025-04-10 09:30</td>
+                                <td>ตรวจสอบระบบ</td>
+                                <td>สำเร็จ</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleMenu(element, menuId) {
+            const submenu = document.getElementById(menuId);
+            submenu.classList.toggle('show');
+            element.classList.toggle('active');
+        }
+
+        function toggleMainMenu(menuId) {
+            const submenu = document.getElementById(menuId);
+            submenu.classList.toggle('show');
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            document.querySelectorAll('.submenu a').forEach(menu => {
+                menu.classList.remove('active');
+            });
+
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.classList.add('active');
+            }
+
+            const menu = document.querySelector(`.submenu a[data-section="${sectionId}"]`);
+            if (menu) {
+                menu.classList.add('active');
+                const parentSubmenu = menu.closest('.submenu');
+                if (parentSubmenu) {
+                    parentSubmenu.classList.add('show');
+                    const parentToggle = parentSubmenu.previousElementSibling;
+                    if (parentToggle && parentToggle.classList.contains('submenu-item-toggle')) {
+                        parentToggle.classList.add('active');
+                    }
+                }
+            }
+
+            if (sectionId === 'summary') {
+                initRequestChart();
+            } else if (sectionId === 'calendar') {
+                initCalendar();
+            } else if (sectionId === 'userStats') {
+                initUserChart();
+            }
+        }
+
+        function initRequestChart() {
+            const ctx = document.getElementById('requestChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['อนุมัติแล้ว', 'รออนุมัติ', 'ยกเลิก'],
+                    datasets: [{
+                        data: [10, 5, 2],
+                        backgroundColor: ['#16a085', '#f39c12', '#e74c3c'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: { font: { family: 'Poppins', size: 14 } }
+                        },
+                        title: {
+                            display: true,
+                            text: 'สถานะคำร้องขอ',
+                            font: { family: 'Poppins', size: 18 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initCalendar() {
+            const calendarEl = document.getElementById('calendarContainer');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: [
+                    { title: 'อบรมทักษะพื้นฐาน', start: '2025-05-01', backgroundColor: '#16a085' },
+                    { title: 'ประชุมทีม', start: '2025-04-15', backgroundColor: '#f39c12' },
+                    { title: 'ตรวจสอบระบบ', start: '2025-04-20', backgroundColor: '#27ae60' }
+                ],
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                buttonText: {
+                    today: 'วันนี้',
+                    month: 'เดือน',
+                    week: 'สัปดาห์',
+                    day: 'วัน'
+                },
+                locale: 'th'
+            });
+            calendar.render();
+        }
+
+        function initUserChart() {
+            const ctx = document.getElementById('userChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['ผู้ดูแลระบบ', 'ที่ปรึกษา', 'คณะกรรมการ', 'ผู้ตรวจรับรอง', 'ผู้ตรวจรับรองคุณภาพฝึกหัด', 'บุคคลทั่วไป'],
+                    datasets: [{
+                        label: 'จำนวนผู้ใช้',
+                        data: [3, 2, 1, 1, 1, 2],
+                        backgroundColor: '#16a085',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'จำนวนผู้ใช้ตามประเภท',
+                            font: { family: 'Poppins', size: 18 }
+                        }
+                    }
+                }
+            });
+        }
+
+
+        showSection('admin');
+    </script>
+
+</body>
+
+</html>
